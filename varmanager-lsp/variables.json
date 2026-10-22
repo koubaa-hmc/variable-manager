@@ -1,0 +1,14 @@
+{
+  "local": {
+    "test_lsp_var": {
+      "value": 99,
+      "type": "integer",
+      "ontological_concept": "Target Location",
+      "description": "Test LSP variable"
+    }
+  },
+  "sequence_global": {},
+  "station_globals": {},
+  "iof": {},
+  "default": {}
+}

@@ -27,7 +27,7 @@ def get_default_manager() -> VariableManager:
     vm = VariableManager(om)
     return vm
 
-logging.basicConfig(level=logging.INFO, filename="variable_manager_lsp.log", filefmt="%(asctime)s %(levelname)s: %(message)s")
+logging.basicConfig(level=logging.INFO, filename="variable_manager_lsp.log", format="%(asctime)s %(levelname)s: %(message)s")
 logger = logging.getLogger("VariableManagerLSP")
 
 class VariableManagerLSP:
