@@ -1,89 +1,122 @@
-id: https://example.org/robot-types-palette
-name: robot_types_palette
-title: Robot Types Palette (LinkML)
+id: https://example.org/electronic-testing-types-palette
+name: electronic_testing_types_palette
+title: Electronic Products Testing Types Palette (LinkML)
 description: >
-  TestStand-inspired Type Palette defined in LinkML format. 
-  Defines customized robotics data types, slots, and default values.
+  TestStand-inspired Type Palette defined in LinkML format for testing electronic products.
+  Defines customized electronics testing data types, measurement slots, and default values.
 
 classes:
-  JointAngles:
-    description: Robot joint angles configuration
+  VoltageMeasurement:
+    description: Voltage test measurement specification for electronic boards
     slots:
-      - values
+      - nominal_value
+      - upper_limit
+      - lower_limit
+      - unit
     slot_usage:
-      values:
+      nominal_value:
         range: float
-        multivalued: true
-        description: List of joint angles in radians
-        ifabsent: "[0.0, -1.57, 1.57, 0.0, 1.57, 0.0]"
-
-  Pose:
-    description: Cartesian 6D pose
-    slots:
-      - x
-      - y
-      - z
-      - roll
-      - pitch
-      - yaw
-    slot_usage:
-      x:
+        description: Expected nominal voltage
+        ifabsent: "5.0"
+      upper_limit:
         range: float
-        description: X coordinate in meters
-        ifabsent: "0.0"
-      y:
+        description: Maximum acceptable voltage limit
+        ifabsent: "5.25"
+      lower_limit:
         range: float
-        description: Y coordinate in meters
-        ifabsent: "0.0"
-      z:
-        range: float
-        description: Z coordinate in meters
-        ifabsent: "0.0"
-      roll:
-        range: float
-        description: Roll orientation angle
-        ifabsent: "0.0"
-      pitch:
-        range: float
-        description: Pitch orientation angle
-        ifabsent: "0.0"
-      yaw:
-        range: float
-        description: Yaw orientation angle
-        ifabsent: "0.0"
-
-  DeviceReference:
-    description: Reference to a concrete hardware device or station
-    slots:
-      - device_id
-    slot_usage:
-      device_id:
+        description: Minimum acceptable voltage limit
+        ifabsent: "4.75"
+      unit:
         range: string
-        description: Unique device identifier
-        ifabsent: "station_cell_default"
+        description: Measurement unit
+        ifabsent: "V"
+
+  ResistanceMeasurement:
+    description: Resistance measurement for components and traces
+    slots:
+      - nominal_resistance
+      - tolerance_percentage
+      - unit
+    slot_usage:
+      nominal_resistance:
+        range: float
+        description: Expected nominal resistance
+        ifabsent: "1000.0"
+      tolerance_percentage:
+        range: float
+        description: Acceptable tolerance percentage
+        ifabsent: "5.0"
+      unit:
+        range: string
+        description: Resistance unit
+        ifabsent: "ohm"
+
+  OscilloscopeChannel:
+    description: Oscilloscope channel acquisition configuration
+    slots:
+      - channel_number
+      - bandwidth_limit_mhz
+      - probe_attenuation
+    slot_usage:
+      channel_number:
+        range: integer
+        description: Oscilloscope channel index
+        ifabsent: "1"
+      bandwidth_limit_mhz:
+        range: float
+        description: Bandwidth filter limit in MHz
+        ifabsent: "20.0"
+      probe_attenuation:
+        range: float
+        description: Probe attenuation ratio
+        ifabsent: "10.0"
+
+  InstrumentReference:
+    description: Reference to automated test equipment (ATE) instrument
+    slots:
+      - instrument_id
+      - connection_address
+    slot_usage:
+      instrument_id:
+        range: string
+        description: Instrument identifier
+        ifabsent: "DMM_Keysight_34401A"
+      connection_address:
+        range: string
+        description: VISA or IP connection string
+        ifabsent: "TCPIP0::192.168.1.100::INSTR"
 
 slots:
-  values:
-    name: values
+  nominal_value:
+    name: nominal_value
     range: float
-  x:
-    name: x
+  upper_limit:
+    name: upper_limit
     range: float
-  y:
-    name: y
+  lower_limit:
+    name: lower_limit
     range: float
-  z:
-    name: z
+  unit:
+    name: unit
+    range: string
+  nominal_resistance:
+    name: nominal_resistance
     range: float
-  roll:
-    name: roll
+  tolerance_percentage:
+    name: tolerance_percentage
     range: float
-  pitch:
-    name: pitch
+  channel_number:
+    name: channel_number
+    range: integer
+  bandwidth_limit_mhz:
+    name: bandwidth_limit_mhz
     range: float
-  yaw:
-    name: yaw
+  probe_attenuation:
+    name: probe_attenuation
     range: float
-  device_id:
-    name: device_id
+  instrument_id:
+    name: instrument_id
+    range: string
+  connection_address:
+    name: connection_address
     range: string

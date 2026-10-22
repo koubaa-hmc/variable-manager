@@ -9,7 +9,7 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
 1. **Multi-Namespace Scopes**:
    - **`local`**: Scoped within an individual test case.
    - **`sequence_global`**: Scoped across the entire robot sequence.
-   - **`station_globals`**: Defines testing sequence characteristics (such as concrete reachable devices and reachability configurations).
+   - **`station_globals`**: Defines testing station characteristics (such as concrete reachable devices and reachability configurations).
    - **`iof`**: Ontology-backed concepts and terms.
 
 2. **Ontology-Backed Semantics (IOF Core)**:
@@ -18,7 +18,7 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
 
 3. **LinkML Type Palettes & Type Registry**:
    - TestStand-inspired **Type Palettes** defined in **LinkML YAML format** under `types/`.
-   - Supports both generic primitives (`string`, `number`, `integer`, `boolean`, `array`, `object`) and registered domain types (`JointAngles`, `Pose`, `DeviceReference`).
+   - Supports both generic primitives (`string`, `number`, `integer`, `boolean`, `array`, `object`) and electronic testing domain types (`VoltageMeasurement`, `ResistanceMeasurement`, `OscilloscopeChannel`, `InstrumentReference`).
    - **Automatic Defaults**: When a new variable is declared without an explicit value, the variable manager automatically populates it using the `ifabsent` default value defined in the LinkML type palette.
 
 4. **Daemon API & LSP Integration**:

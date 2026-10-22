@@ -73,7 +73,7 @@ class VariableManager:
                                 if "type" not in vdata:
                                     val = vdata.get("value")
                                     if isinstance(val, list):
-                                        vdata["type"] = "JointAngles" if len(val) == 6 else "array"
+                                        vdata["type"] = "VoltageMeasurement" if len(val) == 4 else "array"
                                     elif isinstance(val, (int, float)):
                                         vdata["type"] = "number"
                                     elif isinstance(val, bool):

@@ -15,15 +15,15 @@ def test_type_registry_and_palettes():
     assert registry.get("boolean") is not None
 
     # Check LinkML loaded registered types
-    joint_angles_type = registry.get("JointAngles")
-    assert joint_angles_type is not None
-    assert joint_angles_type.category == "registered"
-    assert joint_angles_type.default_value == [0.0, -1.57, 1.57, 0.0, 1.57, 0.0]
+    voltage_meas_type = registry.get("VoltageMeasurement")
+    assert voltage_meas_type is not None
+    assert voltage_meas_type.category == "registered"
+    assert voltage_meas_type.default_value == {"nominal_value": 5.0, "upper_limit": 5.25, "lower_limit": 4.75, "unit": "V"}
 
     # Test validation
     assert registry.validate_value("string", "hello") is True
     assert registry.validate_value("string", 123) is False
-    assert registry.validate_value("JointAngles", [0.0, 0.0]) is True
+    assert registry.validate_value("VoltageMeasurement", {"nominal_value": 3.3}) is True
 
 def test_variable_manager_namespaces_and_defaults():
     om = OntologyManager()
@@ -37,10 +37,10 @@ def test_variable_manager_namespaces_and_defaults():
     assert var["type"] == "integer"
 
     # Test setting variable without value (uses LinkML palette default)
-    vm.set_variable("sequence_global", "my_pose", type_name="JointAngles")
-    var_pose = vm.get_variable("sequence_global", "my_pose")
-    assert var_pose is not None
-    assert var_pose["value"] == [0.0, -1.57, 1.57, 0.0, 1.57, 0.0]
+    vm.set_variable("sequence_global", "vcc_test", type_name="VoltageMeasurement")
+    var_meas = vm.get_variable("sequence_global", "vcc_test")
+    assert var_meas is not None
+    assert var_meas["value"] == {"nominal_value": 5.0, "upper_limit": 5.25, "lower_limit": 4.75, "unit": "V"}
 
 def test_ontology_manager():
     om = OntologyManager()
