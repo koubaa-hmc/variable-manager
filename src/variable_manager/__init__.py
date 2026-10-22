@@ -1,5 +1,6 @@
 import sys
 import os
+import uvicorn
 from typing import List
 from .ontology import OntologyManager
 from .manager import VariableManager
@@ -15,12 +16,11 @@ def get_default_manager() -> VariableManager:
     return vm
 
 def main() -> None:
-    vm = get_default_manager()
-    
     args = sys.argv[1:]
     if not args:
-        print("Variable Manager with Ontology Support (IOF)")
+        print("Variable Manager with Ontology Support & Daemon API (IOF)")
         print("Usage:")
+        print("  variable-manager serve [--host <host>] [--port <port>]")
         print("  variable-manager recommend <context> [limit]")
         print("  variable-manager search <keyword>")
         print("  variable-manager list [namespace]")
@@ -29,7 +29,20 @@ def main() -> None:
 
     command = args[0].lower()
     
-    if command == "recommend":
+    if command == "serve":
+        host = "127.0.0.1"
+        port = 8000
+        # Simple argument parsing for serve
+        for i in range(1, len(args)):
+            if args[i] == "--host" and i + 1 < len(args):
+                host = args[i + 1]
+            elif args[i] == "--port" and i + 1 < len(args):
+                port = int(args[i + 1])
+        print(f"Starting Variable Manager daemon API on http://{host}:{port} ...")
+        uvicorn.run("variable_manager.server:app", host=host, port=port, reload=False)
+
+    elif command == "recommend":
+        vm = get_default_manager()
         context = args[1] if len(args) > 1 else "general"
         limit = int(args[2]) if len(args) > 2 else 5
         recs = vm.recommend_variables(context, limit)
@@ -42,6 +55,7 @@ def main() -> None:
             print()
 
     elif command == "search":
+        vm = get_default_manager()
         keyword = args[1] if len(args) > 1 else ""
         results = vm.ontology_manager.search_concepts(keyword)
         print(f"\nOntology search results for '{keyword}':")
@@ -51,12 +65,14 @@ def main() -> None:
                 print(f"    {res['description'][:100]}...")
 
     elif command == "list":
+        vm = get_default_manager()
         ns = args[1] if len(args) > 1 else None
         variables = vm.list_variables(ns)
         print("\nVariables:")
         print(variables)
 
     elif command == "set":
+        vm = get_default_manager()
         if len(args) < 4:
             print("Usage: variable-manager set <namespace> <name> <value>")
             return
@@ -71,4 +87,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 
