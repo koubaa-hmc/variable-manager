@@ -1,18 +1,13 @@
 {
-  "default": {},
-  "robot": {
-    "home_position": {
-      "value": [
-        0.0,
-        -1.57,
-        1.57,
-        0.0,
-        1.57,
-        0.0
-      ],
+  "local": {},
+  "sequence_global": {},
+  "station_globals": {
+    "target_station": {
+      "value": "station_alpha_reach_cell_1",
       "ontological_concept": "LocationIdentification",
-      "description": "Home position joints"
+      "description": "Concrete reachable device/station identifier"
     }
   },
-  "iof": {}
+  "iof": {},
+  "default": {}
 }

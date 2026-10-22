@@ -8,11 +8,13 @@ class VariableManager:
         self.ontology_manager = ontology_manager
         self.storage_file = storage_file
         # Namespace -> Dict[variable_name, metadata]
-        # Metadata includes: value, ontological_concept, description, etc.
+        # Scopes: local (test case), sequence_global (sequence), station_globals (device reachability / characteristics)
         self.namespaces: Dict[str, Dict[str, Dict[str, Any]]] = {
-            "default": {},
-            "robot": {},
-            "iof": {}
+            "local": {},
+            "sequence_global": {},
+            "station_globals": {},
+            "iof": {},
+            "default": {}
         }
         self.load_from_file()
 
