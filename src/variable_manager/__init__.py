@@ -7,9 +7,20 @@ from .manager import VariableManager
 
 def get_default_manager() -> VariableManager:
     om = OntologyManager()
-    # Load IOF Core ontology if present
-    ontology_path = os.path.join(os.getcwd(), "ontologies", "iof-core.rdf")
-    if os.path.exists(ontology_path):
+    # Try multiple paths for ontologies
+    possible_paths = [
+        os.path.join(os.getcwd(), "ontologies", "iof-core.rdf"),
+        os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"),
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"))
+    ]
+    
+    ontology_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            ontology_path = p
+            break
+
+    if ontology_path:
         om.load_ontology("iof", ontology_path)
     
     vm = VariableManager(om)

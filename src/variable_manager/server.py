@@ -14,8 +14,21 @@ app = FastAPI(
 
 # Initialize global managers
 ontology_manager = OntologyManager()
-ontology_path = os.path.join(os.getcwd(), "ontologies", "iof-core.rdf")
-if os.path.exists(ontology_path):
+
+# Try multiple paths for ontologies
+possible_paths = [
+    os.path.join(os.getcwd(), "ontologies", "iof-core.rdf"),
+    os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"))
+]
+
+ontology_path = None
+for p in possible_paths:
+    if os.path.exists(p):
+        ontology_path = p
+        break
+
+if ontology_path:
     ontology_manager.load_ontology("iof", ontology_path)
 
 variable_manager = VariableManager(ontology_manager)
