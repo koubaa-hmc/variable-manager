@@ -81,3 +81,13 @@ def test_fastapi_server_endpoints():
     get_res = client.get("/variables/station_globals/test_station")
     assert get_res.status_code == 200
     assert get_res.json()["value"] == "cell_1"
+
+def test_init_project(tmp_path):
+    from variable_manager.init_project import initialize_project
+    proj_dir = tmp_path / "electronic_test_sequence_project"
+    initialize_project(str(proj_dir))
+    
+    assert (proj_dir / "types" / "standard_test_palette.yaml").exists()
+    assert (proj_dir / "sequences" / "test_calibration_sequence.py").exists()
+    assert (proj_dir / "station" / "station_config.yaml").exists()
+

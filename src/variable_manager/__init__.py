@@ -4,6 +4,7 @@ import uvicorn
 from typing import List
 from .ontology import OntologyManager
 from .manager import VariableManager
+from .init_project import initialize_project
 
 def get_default_manager() -> VariableManager:
     om = OntologyManager()
@@ -29,8 +30,9 @@ def get_default_manager() -> VariableManager:
 def main() -> None:
     args = sys.argv[1:]
     if not args:
-        print("Variable Manager with Ontology Support & Daemon API (IOF)")
+        print("Variable Manager with TestStand-inspired LinkML Type Palettes & Daemon API")
         print("Usage:")
+        print("  variable-manager init <project_name>")
         print("  variable-manager serve [--host <host>] [--port <port>]")
         print("  variable-manager recommend <context> [limit]")
         print("  variable-manager search <keyword>")
@@ -40,10 +42,13 @@ def main() -> None:
 
     command = args[0].lower()
     
-    if command == "serve":
+    if command == "init":
+        project_name = args[1] if len(args) > 1 else "electronic_test_project"
+        initialize_project(project_name)
+
+    elif command == "serve":
         host = "127.0.0.1"
         port = 8000
-        # Simple argument parsing for serve
         for i in range(1, len(args)):
             if args[i] == "--host" and i + 1 < len(args):
                 host = args[i + 1]
@@ -98,5 +103,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 
 
