@@ -5,6 +5,7 @@ from typing import List
 from .ontology import OntologyManager
 from .manager import VariableManager
 from .init_project import initialize_project
+from .lsp import run_lsp
 
 def get_default_manager() -> VariableManager:
     om = OntologyManager()
@@ -34,6 +35,7 @@ def main() -> None:
         print("Usage:")
         print("  variable-manager init <project_name>")
         print("  variable-manager serve [--host <host>] [--port <port>]")
+        print("  variable-manager lsp")
         print("  variable-manager recommend <context> [limit]")
         print("  variable-manager search <keyword>")
         print("  variable-manager list [namespace]")
@@ -56,6 +58,9 @@ def main() -> None:
                 port = int(args[i + 1])
         print(f"Starting Variable Manager daemon API on http://{host}:{port} ...")
         uvicorn.run("variable_manager.server:app", host=host, port=port, reload=False)
+
+    elif command == "lsp":
+        run_lsp()
 
     elif command == "recommend":
         vm = get_default_manager()

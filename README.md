@@ -21,8 +21,8 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
    - Supports both generic primitives (`string`, `number`, `integer`, `boolean`, `array`, `object`) and registered domain types (`JointAngles`, `Pose`, `DeviceReference`).
    - **Automatic Defaults**: When a new variable is declared without an explicit value, the variable manager automatically populates it using the `ifabsent` default value defined in the LinkML type palette.
 
-4. **Daemon API & IDE / LSP Integration**:
-   - Runs as a FastAPI background daemon providing REST endpoints for IDE extensions and Language Server Protocol (LSP) clients.
+4. **Daemon API & LSP Integration**:
+   - Runs as a FastAPI background daemon or a Language Server Protocol (LSP) server providing completion, hover documentation, diagnostics, and workspace command execution.
 
 ---
 
@@ -33,9 +33,13 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
    uv sync
    ```
 
-2. Start the Daemon API:
+2. Start the Daemon API or Language Server:
    ```bash
+   # Start FastAPI daemon API
    uv run variable-manager serve --port 8000
+
+   # Start LSP Server over stdio
+   uv run variable-manager lsp
    ```
 
 3. Access Interactive API Docs (Swagger UI):
@@ -60,6 +64,11 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
   uv run variable-manager list
   ```
 
+- **Start Language Server (LSP)**:
+  ```bash
+  uv run variable-manager lsp
+  ```
+
 ---
 
 ## API Endpoints
@@ -71,4 +80,3 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
 - `GET /variables`: List all variables across namespaces.
 - `GET /variables/{namespace}/{name}`: Retrieve runtime value and metadata for execution.
 - `POST /variables`: Register or declare a variable (automatically applies LinkML default values if omitted).
-
