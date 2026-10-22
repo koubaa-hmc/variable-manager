@@ -1,7 +1,7 @@
 [project]
 name = "variable-manager"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Variable Manager for supporting editing robot sequences"
 readme = "README.md"
 authors = [
     { name = "Anis Koubaa", email = "mohamed.koubaa@kit.edu" }
