@@ -2,13 +2,14 @@ import json
 import os
 from typing import List, Dict, Any, Optional
 from .ontology import OntologyManager
+from .types import TypeRegistry, TypeDefinition
 
 class VariableManager:
     def __init__(self, ontology_manager: OntologyManager, storage_file: str = "variables.json"):
         self.ontology_manager = ontology_manager
+        self.type_registry = TypeRegistry()
         self.storage_file = storage_file
         # Namespace -> Dict[variable_name, metadata]
-        # Scopes: local (test case), sequence_global (sequence), station_globals (device reachability / characteristics)
         self.namespaces: Dict[str, Dict[str, Dict[str, Any]]] = {
             "local": {},
             "sequence_global": {},
@@ -22,16 +23,22 @@ class VariableManager:
         if name not in self.namespaces:
             self.namespaces[name] = {}
 
-    def set_variable(self, namespace: str, name: str, value: Any, ontological_concept: Optional[str] = None, description: Optional[str] = None):
+    def set_variable(self, namespace: str, name: str, value: Any, type_name: str = "string", ontological_concept: Optional[str] = None, description: Optional[str] = None) -> bool:
         if namespace not in self.namespaces:
             self.add_namespace(namespace)
         
+        # Validate type if registered
+        if not self.type_registry.validate_value(type_name, value):
+            raise ValueError(f"Value {value} does not match type '{type_name}'")
+
         self.namespaces[namespace][name] = {
             "value": value,
+            "type": type_name,
             "ontological_concept": ontological_concept or "",
             "description": description or ""
         }
         self.save_to_file()
+        return True
 
     def get_variable(self, namespace: str, name: str) -> Optional[Dict[str, Any]]:
         if namespace in self.namespaces and name in self.namespaces[namespace]:
@@ -57,11 +64,24 @@ class VariableManager:
                     data = json.load(f)
                     if isinstance(data, dict):
                         for ns, vars_dict in data.items():
+                            # Ensure old entries without type default to string or inferred
+                            for vname, vdata in vars_dict.items():
+                                if "type" not in vdata:
+                                    val = vdata.get("value")
+                                    if isinstance(val, list):
+                                        vdata["type"] = "JointAngles" if len(val) == 6 else "array"
+                                    elif isinstance(val, (int, float)):
+                                        vdata["type"] = "number"
+                                    elif isinstance(val, bool):
+                                        vdata["type"] = "boolean"
+                                    else:
+                                        vdata["type"] = "string"
                             self.namespaces[ns] = vars_dict
             except Exception as e:
                 print(f"Error loading variables from {self.storage_file}: {e}")
 
     def recommend_variables(self, context: str, limit: int = 5) -> List[Dict[str, Any]]:
+
 
         """
         Recommend variable names and semantics based on robot sequence editing context 

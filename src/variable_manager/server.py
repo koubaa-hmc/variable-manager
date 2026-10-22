@@ -37,12 +37,28 @@ class VariableSetRequest(BaseModel):
     namespace: str = "default"
     name: str
     value: Any
+    type: str = "string"
     ontological_concept: Optional[str] = None
     description: Optional[str] = None
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "loaded_ontologies": list(ontology_manager.graphs.keys())}
+    return {
+        "status": "healthy",
+        "loaded_ontologies": list(ontology_manager.graphs.keys()),
+        "registered_types_count": len(variable_manager.type_registry.types)
+    }
+
+@app.get("/types")
+def list_types():
+    return {"types": variable_manager.type_registry.list_types()}
+
+@app.get("/types/{type_name}")
+def get_type(type_name: str):
+    t_def = variable_manager.type_registry.get(type_name)
+    if not t_def:
+        raise HTTPException(status_code=404, detail=f"Type '{type_name}' not found")
+    return t_def.to_dict()
 
 @app.get("/recommend")
 def recommend_variables(context: str = Query(..., description="Editing context (e.g., move, grasp, assembly)"), limit: int = Query(5, description="Max recommendations")):
@@ -67,6 +83,10 @@ def get_variable_value(namespace: str, name: str):
 
 @app.post("/variables")
 def set_variable(req: VariableSetRequest):
-    variable_manager.set_variable(req.namespace, req.name, req.value, req.ontological_concept, req.description)
-    return {"status": "success", "namespace": req.namespace, "name": req.name, "value": req.value}
+    try:
+        variable_manager.set_variable(req.namespace, req.name, req.value, req.type, req.ontological_concept, req.description)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"status": "success", "namespace": req.namespace, "name": req.name, "type": req.type, "value": req.value}
+
 
