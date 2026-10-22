@@ -21,6 +21,9 @@ The **Variable Manager** is a robust service designed to assist robot sequence e
    - Supports both generic primitives (`string`, `number`, `integer`, `boolean`, `array`, `object`) and electronic testing domain types (`VoltageMeasurement`, `ResistanceMeasurement`, `OscilloscopeChannel`, `InstrumentReference`).
    - **Automatic Defaults**: When a new variable is declared without an explicit value, the variable manager automatically populates it using the `ifabsent` default value defined in the LinkML type palette.
 
+4. **Project Initialization & Robot Framework Sequences (`.tseq`)**:
+   - When running `variable-manager init <project_name>`, scaffolds standard project directories, LinkML palettes, station configs, Python sequences (`.py`), and Robot Framework sequence files (`.tseq`) using behavior-driven clauses (`Given`, `When`, `Then`).
+
 4. **Daemon API & LSP Integration**:
    - Runs as a FastAPI background daemon or a Language Server Protocol (LSP) server providing completion, hover documentation, diagnostics, and workspace command execution.
 

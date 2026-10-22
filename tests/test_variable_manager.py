@@ -89,4 +89,5 @@ def test_init_project(tmp_path):
 
     assert (proj_dir / "types" / "standard_test_palette.yaml").exists()
     assert (proj_dir / "sequences" / "test_calibration_sequence.py").exists()
+    assert (proj_dir / "sequences" / "test_calibration_sequence.tseq").exists()
     assert (proj_dir / "station" / "station_config.yaml").exists()

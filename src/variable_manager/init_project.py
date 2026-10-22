@@ -1,5 +1,5 @@
-# import os
-# import shutil
+import os
+import shutil
 from pathlib import Path
 
 STANDARD_TEST_PALETTE_CONTENT = """id: https://example.org/electronic-manufacturing-test-palette
@@ -143,6 +143,33 @@ if __name__ == "__main__":
     run_test_case("SN-2026-9988")
 '''
 
+TEMPLATE_TSEQ_CONTENT = '''*** Settings ***
+Documentation     Electronic Manufacturing Test & Calibration Sequence in Robot Framework (.tseq)
+...               Utilizes test keywords and variable management definitions from test_calibration_sequence.py.
+Library           RequestsLibrary
+
+*** Variables ***
+${API_URL}        http://localhost:8000
+${UUT_SERIAL}     SN-2026-9988
+
+*** Test Cases ***
+Verify Board Power Rail and Voltage Test
+    Given Test Station Is Initialized
+    When Run Test Case For UUT    ${UUT_SERIAL}
+    Then Voltage Measurement Should Be Within Limits
+
+*** Keywords ***
+Test Station Is Initialized
+    Initialize Test Station
+
+Run Test Case For UUT
+    [Arguments]    ${serial_number}
+    Run Test Case    ${serial_number}
+
+Voltage Measurement Should Be Within Limits
+    Log    Verifying 5V VCC power rail test result is PASS
+'''
+
 TEMPLATE_STATION_CONFIG = """station_id: "TEST_BENCH_ALPHA_01"
 manufacturer: "Electronics Test Solutions Corp"
 instruments:
@@ -175,10 +202,15 @@ def initialize_project(project_name: str):
     palette_path.write_text(STANDARD_TEST_PALETTE_CONTENT)
     print(f"Created standard LinkML type palette: {palette_path}")
 
-    # Write sample sequence script
+    # Write sample sequence script (.py)
     seq_path = base_path / "sequences" / "test_calibration_sequence.py"
     seq_path.write_text(TEMPLATE_SEQUENCE_CONTENT)
     print(f"Created sample test sequence: {seq_path}")
+
+    # Write secondary sequence script (.tseq) in Robot Framework syntax with Given/When/Then clauses
+    tseq_path = base_path / "sequences" / "test_calibration_sequence.tseq"
+    tseq_path.write_text(TEMPLATE_TSEQ_CONTENT)
+    print(f"Created Robot Framework test sequence (.tseq): {tseq_path}")
 
     # Write station configuration
     station_path = base_path / "station" / "station_config.yaml"
