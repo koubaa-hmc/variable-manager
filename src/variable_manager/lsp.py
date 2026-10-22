@@ -2,7 +2,7 @@ import sys
 import json
 import logging
 import os
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any # , List, Optional
 
 from .ontology import OntologyManager
 from .manager import VariableManager
@@ -14,7 +14,7 @@ def get_default_manager() -> VariableManager:
         os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"),
         os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"))
     ]
-    
+
     ontology_path = None
     for p in possible_paths:
         if os.path.exists(p):
@@ -23,7 +23,7 @@ def get_default_manager() -> VariableManager:
 
     if ontology_path:
         om.load_ontology("iof", ontology_path)
-    
+
     vm = VariableManager(om)
     return vm
 
@@ -46,7 +46,7 @@ class VariableManagerLSP:
                 line = line.strip()
                 if not line:
                     continue
-                
+
                 # Handle Content-Length header if present
                 if line.startswith("Content-Length:"):
                     content_length = int(line.split(":")[1].strip())
@@ -161,7 +161,7 @@ class VariableManagerLSP:
     def validate_document(self, uri: str, text: str):
         diagnostics = []
         lines = text.splitlines()
-        
+
         # Check for potential undefined variable references or variable usage
         # e.g., references to variables or syntax validation against known namespaces
         all_vars = set()
@@ -184,7 +184,7 @@ class VariableManagerLSP:
 
     def handle_completion(self, msg_id: Any, params: Dict[str, Any]):
         items = []
-        
+
         # Add all variables from variable manager
         for ns_name, vars_dict in self.vm.namespaces.items():
             for vname, vdata in vars_dict.items():
@@ -192,10 +192,10 @@ class VariableManagerLSP:
                 vtype = vdata.get("type", "string")
                 desc = vdata.get("description", "")
                 concept = vdata.get("ontological_concept", "")
-                
+
                 detail = f"[{ns_name}] {vtype} = {val}"
                 documentation = f"Ontological Concept: {concept}\nDescription: {desc}" if concept or desc else f"Variable in namespace {ns_name}"
-                
+
                 items.append({
                     "label": vname,
                     "kind": 6, # Variable kind in LSP
@@ -237,7 +237,7 @@ class VariableManagerLSP:
         position = params.get("position", {})
         text_doc = params.get("textDocument", {})
         uri = text_doc.get("uri")
-        
+
         if uri not in self.documents:
             self.send_response(msg_id, None)
             return
@@ -251,7 +251,7 @@ class VariableManagerLSP:
             return
 
         line = lines[line_idx]
-        
+
         # Extract word around cursor
         start = char_idx
         while start > 0 and (line[start - 1].isalnum() or line[start - 1] in "_."):
@@ -320,7 +320,7 @@ class VariableManagerLSP:
     def handle_execute_command(self, msg_id: Any, params: Dict[str, Any]):
         command = params.get("command")
         args = params.get("arguments", [])
-        
+
         try:
             if command == "variableManager.setVariable":
                 # args: [namespace, name, value, type, ontological_concept, description]
@@ -330,7 +330,7 @@ class VariableManagerLSP:
                 vtype = args[3] if len(args) > 3 else "string"
                 concept = args[4] if len(args) > 4 else None
                 desc = args[5] if len(args) > 5 else None
-                
+
                 self.vm.set_variable(ns, name, val, vtype, concept, desc)
                 self.send_response(msg_id, {"status": "success", "message": f"Set variable {ns}.{name}"})
             elif command == "variableManager.listVariables":

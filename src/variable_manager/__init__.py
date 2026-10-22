@@ -1,7 +1,7 @@
 import sys
 import os
 import uvicorn
-from typing import List
+# from typing import List
 from .ontology import OntologyManager
 from .manager import VariableManager
 from .init_project import initialize_project
@@ -15,7 +15,7 @@ def get_default_manager() -> VariableManager:
         os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"),
         os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ontologies", "iof-core.rdf"))
     ]
-    
+
     ontology_path = None
     for p in possible_paths:
         if os.path.exists(p):
@@ -24,7 +24,7 @@ def get_default_manager() -> VariableManager:
 
     if ontology_path:
         om.load_ontology("iof", ontology_path)
-    
+
     vm = VariableManager(om)
     return vm
 
@@ -43,7 +43,7 @@ def main() -> None:
         return
 
     command = args[0].lower()
-    
+
     if command == "init":
         project_name = args[1] if len(args) > 1 else "electronic_test_project"
         initialize_project(project_name)
@@ -108,6 +108,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-

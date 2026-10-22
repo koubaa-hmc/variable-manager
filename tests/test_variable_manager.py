@@ -1,4 +1,4 @@
-import pytest
+# import pytest
 from fastapi.testclient import TestClient
 from variable_manager.ontology import OntologyManager
 from variable_manager.manager import VariableManager
@@ -86,8 +86,7 @@ def test_init_project(tmp_path):
     from variable_manager.init_project import initialize_project
     proj_dir = tmp_path / "electronic_test_sequence_project"
     initialize_project(str(proj_dir))
-    
+
     assert (proj_dir / "types" / "standard_test_palette.yaml").exists()
     assert (proj_dir / "sequences" / "test_calibration_sequence.py").exists()
     assert (proj_dir / "station" / "station_config.yaml").exists()
-

@@ -2,7 +2,7 @@ import json
 import os
 from typing import List, Dict, Any, Optional
 from .ontology import OntologyManager
-from .types import TypeRegistry, TypeDefinition
+from .types import TypeRegistry # , TypeDefinition
 
 class VariableManager:
     def __init__(self, ontology_manager: OntologyManager, storage_file: str = "variables.json"):
@@ -26,7 +26,7 @@ class VariableManager:
     def set_variable(self, namespace: str, name: str, value: Any = None, type_name: str = "string", ontological_concept: Optional[str] = None, description: Optional[str] = None) -> bool:
         if namespace not in self.namespaces:
             self.add_namespace(namespace)
-        
+
         # If value is not provided (None), use the default value defined in LinkML type palette
         if value is None:
             value = self.type_registry.get_default_value(type_name)
@@ -88,11 +88,11 @@ class VariableManager:
 
 
         """
-        Recommend variable names and semantics based on robot sequence editing context 
+        Recommend variable names and semantics based on robot sequence editing context
         and loaded ontologies (e.g. IOF core).
         """
         recommendations = []
-        
+
         # Map common editing context keywords to ontology search terms
         context_mapping = {
             "move": ["position", "location", "trajectory", "coordinate", "motion"],
@@ -106,7 +106,7 @@ class VariableManager:
         }
 
         search_terms = context_mapping.get(context.lower(), [context])
-        
+
         seen_labels = set()
         for term in search_terms:
             concepts = self.ontology_manager.search_concepts(term)
@@ -116,7 +116,7 @@ class VariableManager:
                 var_name = label.strip().lower().replace(" ", "_").replace("-", "_")
                 # Clean special chars
                 var_name = "".join(c for c in var_name if c.isalnum() or c == '_')
-                
+
                 if var_name and var_name not in seen_labels and len(var_name) > 2:
                     seen_labels.add(var_name)
                     recommendations.append({

@@ -1,6 +1,6 @@
-from fastapi import FastAPI, HTTPException, Query, Body
+from fastapi import FastAPI, HTTPException, Query # , Body
 from pydantic import BaseModel
-from typing import Optional, Any, Dict, List
+from typing import Optional, Any # , Dict, List
 import os
 
 from .ontology import OntologyManager
@@ -88,5 +88,3 @@ def set_variable(req: VariableSetRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return {"status": "success", "namespace": req.namespace, "name": req.name, "type": req.type, "value": req.value}
-
-

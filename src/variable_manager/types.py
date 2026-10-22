@@ -150,7 +150,7 @@ class TypeRegistry:
     def _register_default_types(self):
         # Generics
         self.register(TypeDefinition("string", "generic", "Text string value", "", lambda v: isinstance(v, str)))
-        self.register(TypeDefinition("number", "generic", "Floating point or integer number", 0.0, lambda v: isinstance(v, (int, float) and not isinstance(v, bool))))
+        self.register(TypeDefinition("number", "generic", "Floating point or integer number", 0.0, lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)))
         self.register(TypeDefinition("integer", "generic", "Integer number", 0, lambda v: isinstance(v, int) and not isinstance(v, bool)))
         self.register(TypeDefinition("boolean", "generic", "Boolean true/false", False, lambda v: isinstance(v, bool)))
         self.register(TypeDefinition("array", "generic", "List / array collection", [], lambda v: isinstance(v, list)))

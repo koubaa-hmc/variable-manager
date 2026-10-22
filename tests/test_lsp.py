@@ -1,4 +1,4 @@
-import pytest
+# import pytest
 import json
 from variable_manager.lsp import VariableManagerLSP
 
@@ -33,7 +33,7 @@ def test_lsp_initialize_and_commands():
         "method": "initialize",
         "params": {}
     }
-    
+
     cmd_msg = {
         "jsonrpc": "2.0",
         "id": 2,
@@ -79,9 +79,9 @@ def test_lsp_initialize_and_commands():
 
     import sys
     mock_io = MockStream(input_stream)
-    
+
     server = VariableManagerLSP()
-    
+
     # Temporarily monkeypatch sys.stdin and sys.stdout
     old_stdin = sys.stdin
     old_stdout = sys.stdout
@@ -97,8 +97,8 @@ def test_lsp_initialize_and_commands():
     # Verify responses
     assert len(mock_io.output) > 0
     # Combine outputs and parse JSON-RPC responses
-    full_output = "".join(mock_io.output)
-    
+    # full_output = "".join(mock_io.output)
+
     # Check that variable was successfully set in manager
     var = server.vm.get_variable("local", "test_lsp_var")
     assert var is not None
