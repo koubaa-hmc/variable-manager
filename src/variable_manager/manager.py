@@ -1,27 +1,35 @@
+import json
+import os
 from typing import List, Dict, Any, Optional
 from .ontology import OntologyManager
 
 class VariableManager:
-    def __init__(self, ontology_manager: OntologyManager):
+    def __init__(self, ontology_manager: OntologyManager, storage_file: str = "variables.json"):
         self.ontology_manager = ontology_manager
+        self.storage_file = storage_file
         # Namespace -> Dict[variable_name, metadata]
+        # Metadata includes: value, ontological_concept, description, etc.
         self.namespaces: Dict[str, Dict[str, Dict[str, Any]]] = {
             "default": {},
             "robot": {},
             "iof": {}
         }
+        self.load_from_file()
 
     def add_namespace(self, name: str):
         if name not in self.namespaces:
             self.namespaces[name] = {}
 
-    def set_variable(self, namespace: str, name: str, value: Any, ontological_concept: Optional[str] = None):
+    def set_variable(self, namespace: str, name: str, value: Any, ontological_concept: Optional[str] = None, description: Optional[str] = None):
         if namespace not in self.namespaces:
             self.add_namespace(namespace)
+        
         self.namespaces[namespace][name] = {
             "value": value,
-            "ontological_concept": ontological_concept
+            "ontological_concept": ontological_concept or "",
+            "description": description or ""
         }
+        self.save_to_file()
 
     def get_variable(self, namespace: str, name: str) -> Optional[Dict[str, Any]]:
         if namespace in self.namespaces and name in self.namespaces[namespace]:
@@ -33,7 +41,26 @@ class VariableManager:
             return {namespace: self.namespaces.get(namespace, {})}
         return self.namespaces
 
+    def save_to_file(self):
+        try:
+            with open(self.storage_file, "w") as f:
+                json.dump(self.namespaces, f, indent=2)
+        except Exception as e:
+            print(f"Error saving variables to {self.storage_file}: {e}")
+
+    def load_from_file(self):
+        if os.path.exists(self.storage_file):
+            try:
+                with open(self.storage_file, "r") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict):
+                        for ns, vars_dict in data.items():
+                            self.namespaces[ns] = vars_dict
+            except Exception as e:
+                print(f"Error loading variables from {self.storage_file}: {e}")
+
     def recommend_variables(self, context: str, limit: int = 5) -> List[Dict[str, Any]]:
+
         """
         Recommend variable names and semantics based on robot sequence editing context 
         and loaded ontologies (e.g. IOF core).

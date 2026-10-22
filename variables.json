@@ -1,0 +1,18 @@
+{
+  "default": {},
+  "robot": {
+    "home_position": {
+      "value": [
+        0.0,
+        -1.57,
+        1.57,
+        0.0,
+        1.57,
+        0.0
+      ],
+      "ontological_concept": "LocationIdentification",
+      "description": "Home position joints"
+    }
+  },
+  "iof": {}
+}
