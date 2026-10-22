@@ -1,0 +1,89 @@
+id: https://example.org/robot-types-palette
+name: robot_types_palette
+title: Robot Types Palette (LinkML)
+description: >
+  TestStand-inspired Type Palette defined in LinkML format. 
+  Defines customized robotics data types, slots, and default values.
+
+classes:
+  JointAngles:
+    description: Robot joint angles configuration
+    slots:
+      - values
+    slot_usage:
+      values:
+        range: float
+        multivalued: true
+        description: List of joint angles in radians
+        ifabsent: "[0.0, -1.57, 1.57, 0.0, 1.57, 0.0]"
+
+  Pose:
+    description: Cartesian 6D pose
+    slots:
+      - x
+      - y
+      - z
+      - roll
+      - pitch
+      - yaw
+    slot_usage:
+      x:
+        range: float
+        description: X coordinate in meters
+        ifabsent: "0.0"
+      y:
+        range: float
+        description: Y coordinate in meters
+        ifabsent: "0.0"
+      z:
+        range: float
+        description: Z coordinate in meters
+        ifabsent: "0.0"
+      roll:
+        range: float
+        description: Roll orientation angle
+        ifabsent: "0.0"
+      pitch:
+        range: float
+        description: Pitch orientation angle
+        ifabsent: "0.0"
+      yaw:
+        range: float
+        description: Yaw orientation angle
+        ifabsent: "0.0"
+
+  DeviceReference:
+    description: Reference to a concrete hardware device or station
+    slots:
+      - device_id
+    slot_usage:
+      device_id:
+        range: string
+        description: Unique device identifier
+        ifabsent: "station_cell_default"
+
+slots:
+  values:
+    name: values
+    range: float
+  x:
+    name: x
+    range: float
+  y:
+    name: y
+    range: float
+  z:
+    name: z
+    range: float
+  roll:
+    name: roll
+    range: float
+  pitch:
+    name: pitch
+    range: float
+  yaw:
+    name: yaw
+    range: float
+  device_id:
+    name: device_id
+    range: string

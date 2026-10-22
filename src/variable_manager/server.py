@@ -36,7 +36,7 @@ variable_manager = VariableManager(ontology_manager)
 class VariableSetRequest(BaseModel):
     namespace: str = "default"
     name: str
-    value: Any
+    value: Optional[Any] = None
     type: str = "string"
     ontological_concept: Optional[str] = None
     description: Optional[str] = None

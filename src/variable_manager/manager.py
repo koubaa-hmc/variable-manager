@@ -23,10 +23,14 @@ class VariableManager:
         if name not in self.namespaces:
             self.namespaces[name] = {}
 
-    def set_variable(self, namespace: str, name: str, value: Any, type_name: str = "string", ontological_concept: Optional[str] = None, description: Optional[str] = None) -> bool:
+    def set_variable(self, namespace: str, name: str, value: Any = None, type_name: str = "string", ontological_concept: Optional[str] = None, description: Optional[str] = None) -> bool:
         if namespace not in self.namespaces:
             self.add_namespace(namespace)
         
+        # If value is not provided (None), use the default value defined in LinkML type palette
+        if value is None:
+            value = self.type_registry.get_default_value(type_name)
+
         # Validate type if registered
         if not self.type_registry.validate_value(type_name, value):
             raise ValueError(f"Value {value} does not match type '{type_name}'")

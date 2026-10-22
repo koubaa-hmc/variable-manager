@@ -1,5 +1,19 @@
 {
-  "local": {},
+  "local": {
+    "default_test_pose": {
+      "value": [
+        0.0,
+        -1.57,
+        1.57,
+        0.0,
+        1.57,
+        0.0
+      ],
+      "type": "JointAngles",
+      "ontological_concept": "",
+      "description": ""
+    }
+  },
   "sequence_global": {
     "start_pose": {
       "value": [
