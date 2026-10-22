@@ -32,6 +32,12 @@
       "ontological_concept": "LocationIdentification",
       "description": "Concrete reachable device/station identifier",
       "type": "string"
+    },
+    "test_station": {
+      "value": "cell_1",
+      "type": "string",
+      "ontological_concept": "",
+      "description": ""
     }
   },
   "iof": {},
